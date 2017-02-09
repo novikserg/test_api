@@ -1,41 +1,32 @@
 class Api::V1::BankGuaranteesController < ApplicationController
-  before_action :set_bank_guarantee, only: [:show, :update]
-  
-  before_action :authenticate_api_v1_company!
+  before_action :authenticate_company!
+  before_action :set_bank_guarantee, only: [:show, :update, :destroy]
 
   def show
   end
 
   def create
-    @bank_guarantee = BankGuarantee.new(bank_guarantee_params)
+    @bank_guarantee = BankGuarantee.create!(bank_guarantee_params)
 
     respond_to do |format|
-      if @bank_guarantee.save
-        format.json { render :show, status: :created }
-      else
-        format.json { render json: @bank_guarantee.errors, status: :unprocessable_entity }
-      end
+      format.json { render :show, status: :created }
     end
   end
 
   def update
+    @bank_guarantee.update!(bank_guarantee_params)
+
     respond_to do |format|
-      if @bank_guarantee.update(bank_guarantee_params)
-        format.json { render :show, status: :ok }
-      else
-        format.json { render json: @bank_guarantee.errors, status: :unprocessable_entity }
-      end
+      format.json { render :show, status: :ok }
     end
   end
 
   def destroy
-    set_bank_guarantee
     @bank_guarantee.deactivate!
     head :no_content
   end
 
   private
-
     # Use callbacks to share common setup or constraints between actions.
     def set_bank_guarantee
       @bank_guarantee = BankGuarantee.find(params[:id])

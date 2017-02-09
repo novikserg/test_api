@@ -1,39 +1,33 @@
 class Api::V1::TransactionsController < ApplicationController
-  before_action :set_transaction, only: [:show, :update, :destroy, :term_types]
-
-  before_action :authenticate_api_v1_company!
+  before_action :authenticate_company!
+  before_action :set_transaction, only: [:show, :update, :destroy]
 
   def show
   end
 
   def create
-    @transaction = Transaction.new(transaction_params)
+    @transaction = Transaction.create!(transaction_params)
+
     respond_to do |format|
-      if @transaction.save
-        format.json { render :show, status: :created }
-      else
-        format.json { render json: @transaction.errors, status: :unprocessable_entity }
-      end
+      format.json { render :show, status: :created }
     end
   end
 
   def update
+    @transaction.update!(transaction_params)
+
     respond_to do |format|
-      if @transaction.update(transaction_params)
-        format.json { render :show, status: :ok }
-      else
-        format.json { render json: @transaction.errors, status: :unprocessable_entity }
-      end
+      format.json { render :show, status: :ok }
     end
   end
 
   def destroy
-    set_transaction
     @transaction.deactivate!
     head :no_content
   end
 
   private
+  
     # Use callbacks to share common setup or constraints between actions.
     def set_transaction
       @transaction = Transaction.find(params[:id])

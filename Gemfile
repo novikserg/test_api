@@ -30,8 +30,4 @@ group :development, :test do
   gem "rails-controller-testing"
 end
 
-group :test do
-  # gem "database_cleaner", "~> 1.5.3"
-end
-
 gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
