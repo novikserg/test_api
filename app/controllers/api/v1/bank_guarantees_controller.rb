@@ -1,5 +1,7 @@
 class Api::V1::BankGuaranteesController < ApplicationController
   before_action :set_bank_guarantee, only: [:show, :update]
+  
+  before_action :authenticate_api_v1_company!
 
   def show
   end

@@ -5,6 +5,6 @@ class Transaction < ActiveRecord::Base
   def deactivate!
     self.active = false
     save
-    bank_guarantee.deactivate!
+    bank_guarantee.try(:deactivate!)
   end
 end

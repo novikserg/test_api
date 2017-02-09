@@ -1,6 +1,8 @@
 class Api::V1::TransactionsController < ApplicationController
   before_action :set_transaction, only: [:show, :update, :destroy, :term_types]
 
+  before_action :authenticate_api_v1_company!
+
   def show
   end
 

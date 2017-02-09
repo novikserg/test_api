@@ -1,17 +1,24 @@
 require "rails_helper"
 
 RSpec.describe Api::V1::BankGuaranteesController do
+  let!(:company) { Company.create(email: "yeti@pepsi.com", password: "testtest") }
   let!(:transaction) { Transaction.create(name: "l") }
+
+  def token_sign_in(company)
+    auth_headers = company.create_new_auth_token
+    request.headers.merge!(auth_headers)
+  end
 
   before :each do
     request.headers["accept"] = "application/json"
+    token_sign_in(company)
   end
 
   describe "GET show" do
     let(:bank_guarantee) { BankGuarantee.create(transaction_id: transaction.id, active: true) }
     
     before do
-      get :show, transaction_id: transaction.id, id: bank_guarantee.id
+      get :show, params: { transaction_id: transaction.id, id: bank_guarantee.id }
     end
     
     it "assigns @bank_guarantee" do
@@ -25,7 +32,7 @@ RSpec.describe Api::V1::BankGuaranteesController do
   
   describe "POST create" do
     def do_action
-      post :create, transaction_id: transaction.id, bank_guarantee: params
+      post :create, params: { transaction_id: transaction.id, bank_guarantee: params }
     end
 
     context "for correct params" do
@@ -73,7 +80,7 @@ RSpec.describe Api::V1::BankGuaranteesController do
     let!(:new_transaction) { Transaction.create(name: "o") }
 
     def do_action
-      put :update, transaction_id: transaction.id, id: bank_guarantee.id, bank_guarantee: params
+      put :update, params: { transaction_id: transaction.id, id: bank_guarantee.id, bank_guarantee: params }
     end
 
     context "for correct params" do
@@ -117,7 +124,7 @@ RSpec.describe Api::V1::BankGuaranteesController do
     let(:bank_guarantee) { BankGuarantee.create(transaction_id: transaction.id, active: true) }
     
     def do_action
-      delete :destroy, transaction_id: transaction.id, id: bank_guarantee.id
+      delete :destroy, params: { transaction_id: transaction.id, id: bank_guarantee.id }
     end
     
     it "sets active to false" do

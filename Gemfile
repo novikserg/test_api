@@ -15,6 +15,7 @@ gem "coffee-rails", "~> 4.2"
 gem "jquery-rails"
 gem "turbolinks", "~> 5"
 gem "jbuilder", "~> 2.5"
+gem "devise_token_auth", "~> 0.1"
 
 group :development do
   gem "web-console", ">= 3.3.0"
