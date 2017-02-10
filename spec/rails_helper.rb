@@ -71,4 +71,5 @@ RSpec.configure do |config|
   config.include ControllersHelper, type: :controller
   config.include RequestsHelper, type: :request
   config.include FactoryGirl::Syntax::Methods
+  config.include Helpers
 end

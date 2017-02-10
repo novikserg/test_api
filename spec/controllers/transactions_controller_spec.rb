@@ -57,7 +57,7 @@ RSpec.describe Api::V1::TransactionsController do
 
       it "renders the error" do
         do_action
-        expect(JSON.parse(response.body)).to eq({ "name" => ["can't be blank"] })
+        expect(json_response).to eq({ "name" => ["can't be blank"] })
       end
       
       it "returns 422" do
@@ -102,7 +102,7 @@ RSpec.describe Api::V1::TransactionsController do
       end
     
       it "renders the error" do
-        expect(JSON.parse(response.body)).to eq({ "name" => ["can't be blank"] })
+        expect(json_response).to eq({ "name" => ["can't be blank"] })
       end
 
       it "returns 422" do

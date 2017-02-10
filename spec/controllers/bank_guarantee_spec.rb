@@ -59,7 +59,7 @@ RSpec.describe Api::V1::BankGuaranteesController do
 
       it "renders errors" do
         do_action
-        expect(JSON.parse(response.body)).to eq({ "active" => ["is not included in the list"] })
+        expect(json_response).to eq({ "active" => ["is not included in the list"] })
       end
 
       it "returns 422" do
@@ -103,7 +103,7 @@ RSpec.describe Api::V1::BankGuaranteesController do
     
       it "renders the error" do
         do_action
-        expect(JSON.parse(response.body)).to eq({ "current_transaction" => ["must exist"] })
+        expect(json_response).to eq({ "current_transaction" => ["must exist"] })
       end
   
       it "returns 422" do

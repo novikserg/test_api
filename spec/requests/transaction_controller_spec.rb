@@ -1,10 +1,6 @@
 require "rails_helper"
 
 RSpec.describe Api::V1::TransactionsController, type: :request do
-  def json
-    JSON.parse(response.body)
-  end
-  
   let!(:company)      { create(:company) }
   let!(:transactions) { create_list(:transaction, 2, company: company) }
   let(:transaction)   { transactions.first }
