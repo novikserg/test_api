@@ -1,13 +1,9 @@
 require "rails_helper"
 
 RSpec.describe Api::V1::BankGuaranteesController do
-  let!(:company) { Company.create(email: "yeti@pepsi.com", password: "testtest") }
-  let!(:transaction) { Transaction.create(name: "l") }
-
-  def token_sign_in(company)
-    auth_headers = company.create_new_auth_token
-    request.headers.merge!(auth_headers)
-  end
+  let!(:company)     { create(:company) }
+  let!(:transaction) { create(:transaction, company: company) }
+  let(:bank_guarantee) { create(:bank_guarantee, current_transaction: transaction, company: company) }
 
   before :each do
     request.headers["accept"] = "application/json"
@@ -15,8 +11,6 @@ RSpec.describe Api::V1::BankGuaranteesController do
   end
 
   describe "GET show" do
-    let(:bank_guarantee) { BankGuarantee.create(transaction_id: transaction.id, active: true) }
-    
     before do
       get :show, params: { transaction_id: transaction.id, id: bank_guarantee.id }
     end
@@ -39,8 +33,8 @@ RSpec.describe Api::V1::BankGuaranteesController do
       let(:params) { { transaction_id: transaction.id, active: true } }
 
       it "creates a BankGuarantee" do
-        expect{ do_action }.to change{ BankGuarantee.count }.by(1)
-        bank_guarantee = BankGuarantee.last
+        expect{ do_action }.to change{ company.bank_guarantees.count }.by(1)
+        bank_guarantee = company.bank_guarantees.last
         expect(bank_guarantee.transaction_id).to eq(transaction.id)
         expect(bank_guarantee.active).to eq(true)
       end
@@ -76,8 +70,7 @@ RSpec.describe Api::V1::BankGuaranteesController do
   end
 
   describe "PUT update" do
-    let!(:bank_guarantee) { BankGuarantee.create(transaction_id: transaction.id, active: true) }
-    let!(:new_transaction) { Transaction.create(name: "o") }
+    let!(:new_transaction) { create(:transaction, company: company) }
 
     def do_action
       put :update, params: { transaction_id: transaction.id, id: bank_guarantee.id, bank_guarantee: params }
@@ -121,8 +114,6 @@ RSpec.describe Api::V1::BankGuaranteesController do
   end
   
   describe "DELETE destroy" do
-    let(:bank_guarantee) { BankGuarantee.create(transaction_id: transaction.id, active: true) }
-    
     def do_action
       delete :destroy, params: { transaction_id: transaction.id, id: bank_guarantee.id }
     end

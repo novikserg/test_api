@@ -1,6 +1,8 @@
 class Transaction < ActiveRecord::Base
-  validates :name, presence: true
+  validates_presence_of :name, :company_id
+
   has_one :bank_guarantee
+  belongs_to :company
   
   def deactivate!
     self.active = false

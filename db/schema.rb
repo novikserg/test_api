@@ -10,13 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170209202909) do
+ActiveRecord::Schema.define(version: 20170210124606) do
 
   create_table "bank_guarantees", force: :cascade do |t|
     t.boolean  "active",         default: true
     t.integer  "transaction_id"
     t.datetime "created_at",                    null: false
     t.datetime "updated_at",                    null: false
+    t.integer  "company_id"
   end
 
   create_table "companies", force: :cascade do |t|
@@ -50,6 +51,7 @@ ActiveRecord::Schema.define(version: 20170209202909) do
     t.string   "status"
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
+    t.integer  "company_id"
   end
 
 end

@@ -6,7 +6,7 @@ class Api::V1::TransactionsController < ApplicationController
   end
 
   def create
-    @transaction = Transaction.create!(transaction_params)
+    @transaction = current_company.transactions.create!(transaction_params)
 
     respond_to do |format|
       format.json { render :show, status: :created }
@@ -30,7 +30,7 @@ class Api::V1::TransactionsController < ApplicationController
   
     # Use callbacks to share common setup or constraints between actions.
     def set_transaction
-      @transaction = Transaction.find(params[:id])
+      @transaction = current_company.transactions.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

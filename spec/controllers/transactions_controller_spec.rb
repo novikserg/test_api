@@ -1,12 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Api::V1::TransactionsController do
-  let!(:company) { Company.create(email: "yeti@pepsi.com", password: "testtest") }
-
-  def token_sign_in(company)
-    auth_headers = company.create_new_auth_token
-    request.headers.merge!(auth_headers)
-  end
+  let!(:company) { create(:company) }
+  let!(:transaction) { create(:transaction, company: company) }
 
   before :each do
     request.headers["accept"] = "application/json"
@@ -14,8 +10,6 @@ RSpec.describe Api::V1::TransactionsController do
   end
 
   describe "GET show" do
-    let(:transaction) { Transaction.create(name: "s") }
-    
     before do
       get :show, params: { id: transaction.id }
     end
@@ -38,8 +32,8 @@ RSpec.describe Api::V1::TransactionsController do
       let(:params) { { name: "name"} }
       
       it "creates a transaction" do
-        expect{ do_action }.to change{ Transaction.count }.by(1)
-        transaction = Transaction.last
+        expect{ do_action }.to change{ company.transactions.count }.by(1)
+        transaction = company.transactions.last
         expect(transaction.name).to eq("name")
       end
 
@@ -74,17 +68,15 @@ RSpec.describe Api::V1::TransactionsController do
   end
   
   describe "PUT update" do
-    let!(:transaction) { Transaction.create(name: "l") }
-    
     def do_action
       put :update, params: { id: transaction.id , transaction: params }
     end
     
     context "for correct params" do
-      let(:params) { { name: "name", status: "blabla"} }
+      let(:params) { { name: "name", status: "some string"} }
       
       it "updates transaction" do
-        expect{ do_action }.to change{ transaction.reload.name }.from("l").to("name")
+        expect{ do_action }.to change{ transaction.reload.name }.from("New Transaction").to("name")
       end
 
       it "renders the show template" do
@@ -99,30 +91,28 @@ RSpec.describe Api::V1::TransactionsController do
     end
     
     context "for invalid params" do
-      let(:params) { { name: "", status: "blabla" } }
+      let(:params) { { name: "", status: "some string" } }
+      
+      before { do_action }
       
       it "does not update a transaction" do
-        do_action
         transaction.reload
-        expect(transaction.name).to eq "l"
+        expect(transaction.name).to eq "New Transaction"
         expect(transaction.status).to eq nil
       end
     
       it "renders the error" do
-        do_action
         expect(JSON.parse(response.body)).to eq({ "name" => ["can't be blank"] })
       end
 
       it "returns 422" do
-        do_action
         expect(response.status).to eq(422)
       end
     end
   end
   
   describe "DELETE destroy" do
-    let!(:transaction) { Transaction.create(name: "s", active: true) }
-    let!(:bank_guarantee) { BankGuarantee.create(transaction_id: transaction.id, active: true) }
+    let!(:bank_guarantee) { create(:bank_guarantee, current_transaction: transaction) }
     
     def do_action
       delete :destroy, params: { id: transaction.id }

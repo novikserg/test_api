@@ -6,7 +6,7 @@ class Api::V1::BankGuaranteesController < ApplicationController
   end
 
   def create
-    @bank_guarantee = BankGuarantee.create!(bank_guarantee_params)
+    @bank_guarantee = current_company.bank_guarantees.create!(bank_guarantee_params)
 
     respond_to do |format|
       format.json { render :show, status: :created }
@@ -29,7 +29,7 @@ class Api::V1::BankGuaranteesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_bank_guarantee
-      @bank_guarantee = BankGuarantee.find(params[:id])
+      @bank_guarantee = current_company.bank_guarantees.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
