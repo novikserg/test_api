@@ -2,6 +2,10 @@ class Api::V1::TransactionsController < ApplicationController
   before_action :authenticate_company!
   before_action :set_transaction, only: [:show, :update, :destroy]
 
+  def index
+    @transactions = current_company.transactions
+  end
+
   def show
   end
 
