@@ -10,7 +10,9 @@ FactoryGirl.define do
     company
     
     trait :with_bank_guarantee do
-      bank_guarantee
+      after(:create) do |transaction|
+        create(:bank_guarantee, current_transaction: transaction)
+      end
     end
   end
   

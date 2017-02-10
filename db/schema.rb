@@ -13,10 +13,10 @@
 ActiveRecord::Schema.define(version: 20170210124606) do
 
   create_table "bank_guarantees", force: :cascade do |t|
-    t.boolean  "active",         default: true
+    t.boolean  "active"
     t.integer  "transaction_id"
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
     t.integer  "company_id"
   end
 
