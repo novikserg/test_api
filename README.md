@@ -21,6 +21,7 @@ ALSO they ensure e2e integration here (including views rendering - that's what c
 - called user model `Company`, might be `User` as well, but in case other user types come in - we can be prepared
 - devise auth is not refreshing tokens on each request, I disabled that on purpose for easier testing.
 - you can't register a user from API, I would expect some other micro-service app handling that, or it can be written as an API endpoint here - I can do that if you want, but since it's quite straightforward I decided to focus on other things
+- also as code grows, shared examples for controller response codes and views rendered can be added
 
 ## Installation
 `bundle install`   
