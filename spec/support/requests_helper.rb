@@ -1,25 +1,25 @@
 module RequestsHelper
-  def authorized_get(company, path, params = {})
-    auth_headers = company.create_new_auth_token
-    headers = { "ACCEPT" => "application/json" }.merge(auth_headers)
-    get(path, params, headers)
+  def authorized_get(*args)
+    request(:get, *args)
   end
 
-  def authorized_post(company, path, params = {})
-    auth_headers = company.create_new_auth_token
-    headers = { "ACCEPT" => "application/json" }.merge(auth_headers)
-    post(path, params, headers)
+  def authorized_post(*args)
+    request(:post, *args)
   end
   
-  def authorized_put(company, path, params = {})
-    auth_headers = company.create_new_auth_token
-    headers = { "ACCEPT" => "application/json" }.merge(auth_headers)
-    put(path, params, headers)
+  def authorized_put(*args)
+    request(:put, *args)
   end
   
-  def authorized_delete(company, path)
+  def authorized_delete(*args)
+    request(:delete, *args)
+  end
+  
+  private
+  
+  def request(http_method, company, path, params = {})
     auth_headers = company.create_new_auth_token
     headers = { "ACCEPT" => "application/json" }.merge(auth_headers)
-    delete(path, headers)
+    send(http_method, path, params: params, headers: headers)
   end
 end
