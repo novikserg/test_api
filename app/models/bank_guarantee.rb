@@ -6,7 +6,6 @@ class BankGuarantee < ActiveRecord::Base
   belongs_to :company
   
   def deactivate!
-    self.active = false
-    save
+    update!(active: false)
   end
 end
