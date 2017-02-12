@@ -1,8 +1,8 @@
 require "rails_helper"
 
 RSpec.describe ApiErrors do
-  def do_action(params = {})
-    get :index, {}
+  def do_action
+    get :index, params: {}
   end
 
   describe "unprocessable entity" do
@@ -39,7 +39,7 @@ RSpec.describe ApiErrors do
     end
 
     it "returns 404" do
-      do_action(wrong_root_param: "whatever")
+      do_action
       expect(response.status).to eq(400)
     end
   end
